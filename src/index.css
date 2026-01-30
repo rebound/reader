@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+
+/* Custom theme configuration */
+@theme {
+  --color-sepia-50: #fdf8f3;
+  --color-sepia-100: #f9efe3;
+  --color-sepia-200: #f3e4d0;
+  --color-sepia-300: #e8d0b0;
+  --color-sepia-400: #d4b08a;
+  --color-sepia-500: #c49a6c;
+  --color-sepia-600: #b38556;
+  --color-sepia-700: #956c47;
+  --color-sepia-800: #7a593e;
+  --color-sepia-900: #654a35;
+
+  --color-paper-light: #ffffff;
+  --color-paper-sepia: #f4ecd8;
+  --color-paper-dark: #1a1a1a;
+
+  --color-ink-light: #1f2937;
+  --color-ink-sepia: #433422;
+  --color-ink-dark: #e5e5e5;
+
+  --font-family-serif: Georgia, Cambria, 'Times New Roman', serif;
+  --font-family-sans: system-ui, -apple-system, sans-serif;
+
+  --shadow-page: 0 0 20px rgba(0, 0, 0, 0.1), 0 0 40px rgba(0, 0, 0, 0.05);
+  --shadow-page-dark: 0 0 20px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Base styles */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Theme variables */
+:root {
+  --bg-color: #f4ecd8;
+  --text-color: #433422;
+  --accent-color: #956c47;
+  --border-color: #e8d0b0;
+}
+
+[data-theme='light'] {
+  --bg-color: #ffffff;
+  --text-color: #1f2937;
+  --accent-color: #3b82f6;
+  --border-color: #e5e7eb;
+}
+
+[data-theme='sepia'] {
+  --bg-color: #f4ecd8;
+  --text-color: #433422;
+  --accent-color: #956c47;
+  --border-color: #e8d0b0;
+}
+
+[data-theme='dark'] {
+  --bg-color: #1a1a1a;
+  --text-color: #e5e5e5;
+  --accent-color: #60a5fa;
+  --border-color: #374151;
+}
+
+/* EPUB.js content styling - required for third-party library */
+.epub-view {
+  height: 100% !important;
+}
+
+.epub-view iframe {
+  border: none !important;
+}
