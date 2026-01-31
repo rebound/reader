@@ -1,0 +1,94 @@
+{
+  "app": {
+    "name": "Reader"
+  },
+  "meta": {
+    "title_template": "$t({{title}}) • $t(app.name)",
+    "description": "A free privacy-first EPUB and PDF reader - 100% offline"
+  },
+  "common": {
+    "back_to_library": "Back to Library",
+    "loading": "Loading book..."
+  },
+  "header": {
+    "about": {
+      "label": "About Reader"
+    },
+    "theme": {
+      "label": "Theme: {{theme}}",
+      "light": "Light",
+      "sepia": "Sepia",
+      "dark": "Dark"
+    }
+  },
+  "footer": {
+    "tagline": "100% offline • No accounts • Your books stay on your device"
+  },
+  "library": {
+    "title": "Library",
+    "import": "Import",
+    "import_error": "Failed to import",
+    "importing": "Importing...",
+    "empty": {
+      "title": "Your library is empty",
+      "description": "Drag and drop EPUB or PDF files here, or click Import above"
+    },
+    "drop_zone": {
+      "hint": "Drop files here to add to your library"
+    }
+  },
+  "book": {
+    "not_found": "Book not found",
+    "delete_confirm": "Delete \u2018{{title}}\u2019?",
+    "delete_button": "Delete book"
+  },
+  "reader": {
+    "load_error": {
+      "epub": "Failed to load EPUB",
+      "pdf": "Failed to load PDF"
+    },
+    "bookmark": {
+      "add": "Add bookmark",
+      "remove": "Remove bookmark",
+      "page_label": "Page at {{percentage}}%",
+      "pdf_label": "Page {{page}}"
+    },
+    "zoom": {
+      "in": "Zoom in",
+      "out": "Zoom out"
+    },
+    "page_info": "Page {{current}} of {{total}}"
+  },
+  "sidebar": {
+    "title": "Menu",
+    "close": "Close sidebar",
+    "toc": {
+      "empty": "No table of contents available"
+    },
+    "bookmarks": {
+      "empty": "No bookmarks yet",
+      "page_label": "Page {{location}}"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": {
+      "label": "Theme"
+    },
+    "font_size": {
+      "label": "Font Size: {{size}}px",
+      "small": "Small",
+      "large": "Large"
+    },
+    "font_family": {
+      "label": "Font Family",
+      "serif": "Serif",
+      "sans": "Sans-serif"
+    },
+    "line_height": {
+      "label": "Line Height: {{value}}",
+      "compact": "Compact",
+      "spacious": "Spacious"
+    }
+  }
+}
