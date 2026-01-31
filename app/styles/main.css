@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+
+  --font-family-serif: Georgia, Cambria, 'Times New Roman', serif;
+  --font-family-sans: system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --paper: #f4ecd8;
+  --ink: #433422;
+  --ink-muted: #6c5c45;
+  --accent: #956c47;
+  --rule: #e8d0b0;
+}
+
+[data-theme='light'] {
+  --paper: #ffffff;
+  --ink: #1f2937;
+  --ink-muted: #354b68;
+  --accent: #3b82f6;
+  --rule: #e5e7eb;
+}
+
+[data-theme='sepia'] {
+  --paper: #f4ecd8;
+  --ink: #433422;
+  --ink-muted: #6c5c45;
+  --accent: #956c47;
+  --rule: #e8d0b0;
+}
+
+[data-theme='dark'] {
+  --paper: #1a1a1a;
+  --ink: #e5e5e5;
+  --ink-muted: #312f2f;
+  --accent: #60a5fa;
+  --rule: #374151;
+}
+
+.epub-view {
+  height: 100% !important;
+}
+
+.epub-view iframe {
+  border: none !important;
+}
