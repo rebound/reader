@@ -41,6 +41,23 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
   const [showSidebar, setShowSidebar] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
 
+  // Reset scroll position and absorb inertial momentum
+  const resetScroll = useCallback(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    // Temporarily disable scrolling to absorb momentum
+    container.style.overflow = 'hidden'
+    container.scrollTo(0, 0)
+
+    // Re-enable after momentum has dissipated
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        container.style.overflow = 'auto'
+      })
+    })
+  }, [])
+
   // Load PDF document with TanStack Query
   const { data: pdfData, isLoading: pdfLoading, error: pdfError } = usePdfDocument(book.id, book.fileData)
 
@@ -129,8 +146,10 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
         setCurrentPage((prev) => (prev ? Math.max(1, prev - 1) : 1))
+        resetScroll()
       } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
         setCurrentPage((prev) => (prev ? Math.min(numPages, prev + 1) : 1))
+        resetScroll()
       }
     }
 
@@ -138,7 +157,7 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [numPages])
+  }, [numPages, resetScroll])
 
   // Save progress (debounced)
   useEffect(() => {
@@ -162,11 +181,13 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
 
   const goToPrev = useCallback(() => {
     setCurrentPage((prev) => (prev ? Math.max(1, prev - 1) : 1))
-  }, [])
+    resetScroll()
+  }, [resetScroll])
 
   const goToNext = useCallback(() => {
     setCurrentPage((prev) => (prev ? Math.min(numPages, prev + 1) : 1))
-  }, [numPages])
+    resetScroll()
+  }, [numPages, resetScroll])
 
   const goToPage = useCallback(
     (pageNum: string) => {
@@ -174,9 +195,10 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
       if (page >= 1 && page <= numPages) {
         setCurrentPage(page)
         setShowSidebar(false)
+        resetScroll()
       }
     },
-    [numPages],
+    [numPages, resetScroll],
   )
 
   const zoomIn = useCallback(() => {
