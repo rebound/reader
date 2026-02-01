@@ -6,4 +6,5 @@ node_modules/
 .idea
 .react-router
 .vite
+.wrangler
 build
