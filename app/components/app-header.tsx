@@ -35,7 +35,7 @@ export function AppHeader({ actions }: AppHeaderProps) {
         <div className="flex items-center gap-4">
           <Link
             to="/about"
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded-lg p-2 transition-colors hover:bg-black/5"
             aria-label={t('header.about.label')}
           >
             <Info className="h-5 w-5" />
@@ -43,7 +43,7 @@ export function AppHeader({ actions }: AppHeaderProps) {
 
           <button
             onClick={cycleTheme}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded-lg p-2 transition-colors hover:bg-black/5"
             aria-label={t('header.theme.label', { theme: themeName })}
           >
             <ThemeIcon className="h-5 w-5" />

@@ -99,7 +99,7 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
         <p className="mb-4 text-lg">{t('reader.load_error.epub')}</p>
         <button
           onClick={onClose}
-          className="rounded-lg bg-accent px-4 py-2 text-white transition-colors hover:opacity-90"
+          className="flex items-center justify-center rounded-lg bg-accent px-4 py-2 text-white transition-colors hover:opacity-90"
         >
           {t('common.back_to_library')}
         </button>
@@ -115,14 +115,14 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
             onClick={() => {
               setShowSidebar(!showSidebar)
             }}
-            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
             aria-label={t('sidebar.title')}
           >
             <Menu className="h-5 w-5" />
           </button>
           <button
             onClick={onClose}
-            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
             aria-label={t('common.back_to_library')}
           >
             <ArrowLeft className="h-5 w-5" />
@@ -134,7 +134,7 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
         <div className="flex items-center gap-0 sm:gap-2">
           <button
             onClick={toggleBookmark}
-            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
             aria-label={isCurrentPageBookmarked ? t('reader.bookmark.remove') : t('reader.bookmark.add')}
           >
             {isCurrentPageBookmarked ? (
@@ -147,7 +147,7 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
             onClick={() => {
               setShowSettings(!showSettings)
             }}
-            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
             aria-label={t('settings.title')}
           >
             <Settings className="h-5 w-5" />
@@ -179,7 +179,7 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
 
         <button
           onClick={goToPrev}
-          className="absolute top-0 bottom-0 left-0 z-10 flex w-12 items-center justify-center bg-gradient-to-r from-black/5 to-transparent opacity-100 transition-opacity active:from-black/10 sm:w-16 sm:from-transparent sm:opacity-0 sm:hover:from-black/5 sm:hover:opacity-100"
+          className="absolute top-0 bottom-0 left-0 z-10 flex w-12 items-center justify-center bg-linear-to-r from-black/5 to-transparent opacity-100 transition-opacity active:from-black/10 sm:w-16 sm:from-transparent sm:opacity-0 sm:hover:from-black/5 sm:hover:opacity-100"
           aria-label={t('reader.nav.prev')}
         >
           <ChevronLeft className="h-8 w-8 opacity-30 sm:opacity-50" />
@@ -187,7 +187,7 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
 
         <button
           onClick={goToNext}
-          className="absolute top-0 right-0 bottom-0 z-10 flex w-12 items-center justify-center bg-gradient-to-l from-black/5 to-transparent opacity-100 transition-opacity active:from-black/10 sm:w-16 sm:from-transparent sm:opacity-0 sm:hover:from-black/5 sm:hover:opacity-100"
+          className="absolute top-0 right-0 bottom-0 z-10 flex w-12 items-center justify-center bg-linear-to-l from-black/5 to-transparent opacity-100 transition-opacity active:from-black/10 sm:w-16 sm:from-transparent sm:opacity-0 sm:hover:from-black/5 sm:hover:opacity-100"
           aria-label={t('reader.nav.next')}
         >
           <ChevronRight className="h-8 w-8 opacity-30 sm:opacity-50" />

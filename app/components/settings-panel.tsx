@@ -38,7 +38,7 @@ export function SettingsPanel({ settings, onUpdateSetting, onClose }: SettingsPa
           <h2 className="font-serif font-semibold">{t('settings.title')}</h2>
           <button
             onClick={onClose}
-            className="min-h-10 min-w-10 rounded p-1 transition-colors hover:bg-black/5 active:bg-black/10"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded p-1 transition-colors hover:bg-black/5 active:bg-black/10"
             aria-label={t('sidebar.close')}
           >
             <X className="h-5 w-5" />
