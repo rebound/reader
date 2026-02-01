@@ -1,0 +1,13 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "reader"
+main = "./entry.worker.mjs"
+compatibility_date = "2026-01-30"
+
+[assets]
+binding = "ASSETS"
+directory = "./build/client/"
+not_found_handling = "single-page-application"
+
+[[routes]]
+pattern = "reader.benherethewholetime.com"
+custom_domain = true
