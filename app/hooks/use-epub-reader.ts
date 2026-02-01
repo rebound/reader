@@ -46,7 +46,8 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
   // Initialize epub book and rendition - only depends on fileData and bookId
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    if (!viewerRef.current) return
+    const viewerElement = viewerRef.current
+    if (!viewerElement) return
 
     // Reset state for a new book
     initialLocationRestored.current = false
@@ -63,7 +64,7 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
       const epubBook = ePub(bufferCopy)
       bookRef.current = epubBook
 
-      const rendition = epubBook.renderTo(viewerRef.current, {
+      const rendition = epubBook.renderTo(viewerElement, {
         width: '100%',
         height: '100%',
         spread: 'none',
@@ -121,8 +122,24 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
 
       document.addEventListener('keydown', handleKeyDown)
 
+      // Handle resize to keep epub content within the viewport
+      const handleResize = () => {
+        if (renditionRef.current) {
+          const { clientWidth, clientHeight } = viewerElement
+          renditionRef.current.resize(clientWidth, clientHeight)
+        }
+      }
+
+      window.addEventListener('resize', handleResize)
+
+      // Also use ResizeObserver for container size changes
+      const resizeObserver = new ResizeObserver(handleResize)
+      resizeObserver.observe(viewerElement)
+
       return () => {
         document.removeEventListener('keydown', handleKeyDown)
+        window.removeEventListener('resize', handleResize)
+        resizeObserver.disconnect()
         setIsReady(false)
         rendition.destroy()
         epubBook.destroy()

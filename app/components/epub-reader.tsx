@@ -202,11 +202,11 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
           </div>
         )}
 
-        <div className="relative mx-auto h-full max-w-3xl flex-1" {...swipeHandlers}>
+        <div className="relative mx-auto h-full w-full max-w-3xl flex-1 overflow-hidden" {...swipeHandlers}>
           <div
             ref={viewerRef}
             className={clsx(
-              'h-full w-full overflow-hidden',
+              'absolute inset-0',
               settings.fontFamily === 'serif' && 'font-[Georgia,serif]',
               settings.fontFamily === 'sans' && 'font-[system-ui,sans-serif]',
             )}
