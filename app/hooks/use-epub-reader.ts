@@ -221,10 +221,10 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
     const rendition = renditionRef.current
     if (!rendition) return
 
-    const themeColors: Record<string, { background: string; color: string }> = {
-      light: { background: '#ffffff', color: '#1f2937' },
-      sepia: { background: '#f4ecd8', color: '#433422' },
-      dark: { background: '#1a1a1a', color: '#e5e5e5' },
+    const themeColors: Record<string, { background: string; color: string; accent: string }> = {
+      light: { background: '#ffffff', color: '#1f2937', accent: '#3b82f6' },
+      sepia: { background: '#f4ecd8', color: '#433422', accent: '#956c47' },
+      dark: { background: '#1a1a1a', color: '#e5e5e5', accent: '#60a5fa' },
     }
 
     const colors = themeColors[theme] ?? themeColors.light
@@ -243,6 +243,13 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
       },
       'h1, h2, h3, h4, h5, h6': {
         'font-family': `${fontFamily} !important`,
+      },
+      'a, a:link, a:visited': {
+        color: `${colors.accent} !important`,
+      },
+      'a:hover, a:active': {
+        color: `${colors.accent} !important`,
+        opacity: '0.8',
       },
     }
 
