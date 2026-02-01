@@ -18,6 +18,7 @@ import { Spinner } from '@/components/spinner.tsx'
 import { useBookmarks } from '@/hooks/use-bookmarks.ts'
 import { usePdfDocument } from '@/hooks/use-pdf-document.ts'
 import { useProgress } from '@/hooks/use-progress.ts'
+import { useSwipe } from '@/hooks/use-swipe.ts'
 import type { Settings as SettingsType } from '@/hooks/use-settings.ts'
 import type { Book } from '@/utilities/db.ts'
 
@@ -202,6 +203,11 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
   const percentage = numPages > 0 && currentPage ? Math.round((currentPage / numPages) * 100) : 0
   const isLoading = pdfLoading || currentPage === null
 
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: goToNext,
+    onSwipeRight: goToPrev,
+  })
+
   if (pdfError) {
     return (
       <div className="flex h-screen flex-col items-center justify-center bg-paper text-ink">
@@ -218,42 +224,47 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
 
   return (
     <div className="flex h-screen flex-col bg-paper text-ink transition-colors duration-300">
-      <header className="flex items-center justify-between border-b border-rule px-4 py-3">
-        <div className="flex items-center gap-3">
+      <header className="flex items-center justify-between border-b border-rule px-2 py-2 sm:px-4 sm:py-3">
+        <div className="flex items-center gap-1 sm:gap-3">
           <button
             onClick={() => {
               setShowSidebar(!showSidebar)
             }}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            aria-label={t('sidebar.title')}
           >
             <Menu className="h-5 w-5" />
           </button>
-          <button onClick={onClose} className="rounded-lg p-2 transition-colors hover:bg-black/5">
+          <button
+            onClick={onClose}
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            aria-label={t('common.back_to_library')}
+          >
             <ArrowLeft className="h-5 w-5" />
           </button>
         </div>
 
-        <h1 className="max-w-md truncate font-serif text-lg">{book.title}</h1>
+        <h1 className="max-w-24 truncate font-serif text-base sm:max-w-md sm:text-lg">{book.title}</h1>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-0 sm:gap-2">
           <button
             onClick={zoomOut}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
-            title={t('reader.zoom.out')}
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            aria-label={t('reader.zoom.out')}
           >
             <ZoomOut className="h-5 w-5" />
           </button>
-          <span className="w-12 text-center text-sm opacity-60">{Math.round(scale * 100)}%</span>
+          <span className="hidden w-12 text-center text-sm opacity-60 sm:block">{Math.round(scale * 100)}%</span>
           <button
             onClick={zoomIn}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
             aria-label={t('reader.zoom.in')}
           >
             <ZoomIn className="h-5 w-5" />
           </button>
           <button
             onClick={toggleBookmark}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
             aria-label={isCurrentPageBookmarked ? t('reader.bookmark.remove') : t('reader.bookmark.add')}
           >
             {isCurrentPageBookmarked ? (
@@ -266,7 +277,8 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
             onClick={() => {
               setShowSettings(!showSettings)
             }}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            aria-label={t('settings.title')}
           >
             <Settings className="h-5 w-5" />
           </button>
@@ -299,20 +311,26 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
         <button
           onClick={goToPrev}
           disabled={!currentPage || currentPage <= 1}
-          className="absolute top-0 bottom-0 left-0 z-10 flex w-16 items-center justify-center opacity-0 transition-opacity hover:opacity-100 disabled:cursor-not-allowed"
+          className="absolute top-0 bottom-0 left-0 z-10 flex w-12 items-center justify-center bg-gradient-to-r from-black/5 to-transparent opacity-100 transition-opacity active:from-black/10 disabled:pointer-events-none disabled:opacity-30 sm:w-16 sm:from-transparent sm:opacity-0 sm:hover:from-black/5 sm:hover:opacity-100"
+          aria-label={t('reader.nav.prev')}
         >
-          <ChevronLeft className="h-8 w-8 opacity-50" />
+          <ChevronLeft className="h-8 w-8 opacity-30 sm:opacity-50" />
         </button>
 
         <button
           onClick={goToNext}
           disabled={!currentPage || currentPage >= numPages}
-          className="absolute top-0 right-0 bottom-0 z-10 flex w-16 items-center justify-center opacity-0 transition-opacity hover:opacity-100 disabled:cursor-not-allowed"
+          className="absolute top-0 right-0 bottom-0 z-10 flex w-12 items-center justify-center bg-gradient-to-l from-black/5 to-transparent opacity-100 transition-opacity active:from-black/10 disabled:pointer-events-none disabled:opacity-30 sm:w-16 sm:from-transparent sm:opacity-0 sm:hover:from-black/5 sm:hover:opacity-100"
+          aria-label={t('reader.nav.next')}
         >
-          <ChevronRight className="h-8 w-8 opacity-50" />
+          <ChevronRight className="h-8 w-8 opacity-30 sm:opacity-50" />
         </button>
 
-        <div ref={containerRef} className="flex flex-1 items-start justify-center overflow-auto py-8">
+        <div
+          ref={containerRef}
+          className="flex flex-1 items-start justify-center overflow-auto py-8"
+          {...swipeHandlers}
+        >
           {isLoading ? (
             <div className="flex flex-col items-center gap-4">
               <Spinner />

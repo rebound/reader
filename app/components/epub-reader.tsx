@@ -9,6 +9,7 @@ import { Spinner } from '@/components/spinner.tsx'
 import { useBookmarks } from '@/hooks/use-bookmarks.ts'
 import { useEpubReader } from '@/hooks/use-epub-reader.ts'
 import { useProgress } from '@/hooks/use-progress.ts'
+import { useSwipe } from '@/hooks/use-swipe.ts'
 import type { Settings as SettingsType } from '@/hooks/use-settings.ts'
 import type { Book } from '@/utilities/db.ts'
 
@@ -87,6 +88,11 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
     }
   }, [currentLocation, isCurrentPageBookmarked, bookmarks, removeBookmark, createBookmark, percentage, t])
 
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: goToNext,
+    onSwipeRight: goToPrev,
+  })
+
   if (error) {
     return (
       <div className="flex h-screen flex-col items-center justify-center bg-paper text-ink">
@@ -103,27 +109,32 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
 
   return (
     <div className="flex h-screen flex-col bg-paper text-ink transition-colors duration-300">
-      <header className="flex items-center justify-between border-b border-rule px-4 py-3">
-        <div className="flex items-center gap-3">
+      <header className="flex items-center justify-between border-b border-rule px-2 py-2 sm:px-4 sm:py-3">
+        <div className="flex items-center gap-1 sm:gap-3">
           <button
             onClick={() => {
               setShowSidebar(!showSidebar)
             }}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            aria-label={t('sidebar.title')}
           >
             <Menu className="h-5 w-5" />
           </button>
-          <button onClick={onClose} className="rounded-lg p-2 transition-colors hover:bg-black/5">
+          <button
+            onClick={onClose}
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            aria-label={t('common.back_to_library')}
+          >
             <ArrowLeft className="h-5 w-5" />
           </button>
         </div>
 
-        <h1 className="max-w-md truncate font-serif text-lg text-ink">{book.title}</h1>
+        <h1 className="max-w-32 truncate font-serif text-base sm:max-w-md sm:text-lg">{book.title}</h1>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-0 sm:gap-2">
           <button
             onClick={toggleBookmark}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
             aria-label={isCurrentPageBookmarked ? t('reader.bookmark.remove') : t('reader.bookmark.add')}
           >
             {isCurrentPageBookmarked ? (
@@ -136,7 +147,8 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
             onClick={() => {
               setShowSettings(!showSettings)
             }}
-            className="rounded-lg p-2 transition-colors hover:bg-black/5"
+            className="min-h-10 min-w-10 rounded-lg p-2 transition-colors hover:bg-black/5 active:bg-black/10"
+            aria-label={t('settings.title')}
           >
             <Settings className="h-5 w-5" />
           </button>
@@ -167,16 +179,18 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
 
         <button
           onClick={goToPrev}
-          className="absolute top-0 bottom-0 left-0 z-10 flex w-16 items-center justify-center opacity-0 transition-opacity hover:opacity-100"
+          className="absolute top-0 bottom-0 left-0 z-10 flex w-12 items-center justify-center bg-gradient-to-r from-black/5 to-transparent opacity-100 transition-opacity active:from-black/10 sm:w-16 sm:from-transparent sm:opacity-0 sm:hover:from-black/5 sm:hover:opacity-100"
+          aria-label={t('reader.nav.prev')}
         >
-          <ChevronLeft className="h-8 w-8 opacity-50" />
+          <ChevronLeft className="h-8 w-8 opacity-30 sm:opacity-50" />
         </button>
 
         <button
           onClick={goToNext}
-          className="absolute top-0 right-0 bottom-0 z-10 flex w-16 items-center justify-center opacity-0 transition-opacity hover:opacity-100"
+          className="absolute top-0 right-0 bottom-0 z-10 flex w-12 items-center justify-center bg-gradient-to-l from-black/5 to-transparent opacity-100 transition-opacity active:from-black/10 sm:w-16 sm:from-transparent sm:opacity-0 sm:hover:from-black/5 sm:hover:opacity-100"
+          aria-label={t('reader.nav.next')}
         >
-          <ChevronRight className="h-8 w-8 opacity-50" />
+          <ChevronRight className="h-8 w-8 opacity-30 sm:opacity-50" />
         </button>
 
         {!isReady && (
@@ -188,14 +202,16 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
           </div>
         )}
 
-        <div
-          ref={viewerRef}
-          className={clsx(
-            'mx-auto h-full max-w-3xl flex-1 overflow-hidden',
-            settings.fontFamily === 'serif' && 'font-[Georgia,serif]',
-            settings.fontFamily === 'sans' && 'font-[system-ui,sans-serif]',
-          )}
-        />
+        <div className="relative mx-auto h-full max-w-3xl flex-1" {...swipeHandlers}>
+          <div
+            ref={viewerRef}
+            className={clsx(
+              'h-full w-full overflow-hidden',
+              settings.fontFamily === 'serif' && 'font-[Georgia,serif]',
+              settings.fontFamily === 'sans' && 'font-[system-ui,sans-serif]',
+            )}
+          />
+        </div>
       </div>
 
       <footer className="border-t border-rule px-4 py-2">

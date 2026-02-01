@@ -47,6 +47,10 @@
       "epub": "Failed to load EPUB",
       "pdf": "Failed to load PDF"
     },
+    "nav": {
+      "prev": "Previous page",
+      "next": "Next page"
+    },
     "bookmark": {
       "add": "Add bookmark",
       "remove": "Remove bookmark",

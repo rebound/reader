@@ -1,7 +1,7 @@
 import { EpubReader } from '@/components/epub-reader.tsx'
 import { PdfReader } from '@/components/pdf-reader.tsx'
 import type { Settings } from '@/hooks/use-settings.ts'
-import type { Book } from '@/utils/db.ts'
+import type { Book } from '@/utilities/db.ts'
 
 type ReaderProps = {
   book: Book
