@@ -40,8 +40,9 @@ export default defineConfig({
       },
     }),
     VitePWA({
+      strategies: 'generateSW',
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg'],
+      includeAssets: ['*.png', '*.ico', '*.json'],
       outDir: 'build/client',
       manifest: {
         name: 'Reader',
@@ -71,8 +72,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2,mjs}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2,mjs,json}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+        navigateFallback: '/index.html',
       },
     }),
   ],
