@@ -228,6 +228,41 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
     onSwipeRight: goToPrev,
   })
 
+  // Horizontal scroll navigation - only when page fits in viewport
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const handleWheel = (e: React.WheelEvent) => {
+    const container = containerRef.current
+    if (!container) return
+
+    // Only respond to horizontal scrolling
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
+
+    // Don't navigate if the page is horizontally scrollable (zoomed in)
+    const isHorizontallyScrollable = container.scrollWidth > container.clientWidth
+    if (isHorizontallyScrollable) return
+
+    // Debounce to prevent multiple page turns from momentum scrolling
+    if (scrollTimeoutRef.current) return
+
+    if (e.deltaX > 30) {
+      goToNext()
+    } else if (e.deltaX < -30) {
+      goToPrev()
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      scrollTimeoutRef.current = null
+    }, 300)
+  }
+
+  // Navigate to a percentage
+  const handleSeek = (pct: number) => {
+    if (!numPages) return
+    const page = Math.max(1, Math.min(numPages, Math.ceil((pct / 100) * numPages)))
+    setCurrentPage(page)
+    resetScroll()
+  }
+
   if (pdfError) {
     return (
       <div className="flex h-screen flex-col items-center justify-center bg-paper text-ink">
@@ -350,6 +385,7 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
           ref={containerRef}
           className="flex flex-1 items-start justify-center overflow-auto py-8"
           {...swipeHandlers}
+          onWheel={handleWheel}
         >
           {isLoading ? (
             <div className="flex flex-col items-center gap-4">
@@ -367,7 +403,7 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
           <span className="text-sm opacity-60">
             {t('reader.page_info', { current: currentPage ?? '-', total: numPages || '-' })}
           </span>
-          <ProgressBar percentage={percentage} className="flex-1" />
+          <ProgressBar percentage={percentage} className="flex-1" onSeek={handleSeek} />
         </div>
       </footer>
     </div>

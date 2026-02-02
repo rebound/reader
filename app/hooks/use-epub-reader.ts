@@ -20,6 +20,7 @@ type EpubReaderState = {
 
 type EpubReaderActions = {
   goToLocation: (cfi: string) => void
+  goToPercentage: (percentage: number) => void
   goToPrev: () => void
   goToNext: () => void
   applyTheme: (theme: string, fontSize: number, fontFamily: string, lineHeight: number) => void
@@ -204,6 +205,18 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
     }
   }
 
+  const goToPercentage = (percentage: number) => {
+    const book = bookRef.current
+    const rendition = renditionRef.current
+    if (!book || !rendition || !locationsReady.current) return
+
+    const decimal = percentage / 100
+    const cfi = book.locations.cfiFromPercentage(decimal)
+    if (cfi) {
+      void rendition.display(cfi)
+    }
+  }
+
   const goToPrev = () => {
     if (renditionRef.current) {
       void renditionRef.current.prev()
@@ -271,6 +284,7 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
     isReady,
     error,
     goToLocation,
+    goToPercentage,
     goToPrev,
     goToNext,
     applyTheme,

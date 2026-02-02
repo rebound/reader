@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 import { ArrowLeft, Bookmark, BookmarkPlus, ChevronLeft, ChevronRight, Menu, Settings } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ProgressBar } from '@/components/progress-bar.tsx'
 import { SettingsPanel } from '@/components/settings-panel.tsx'
@@ -30,12 +30,23 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
   const { bookmarks, createBookmark, removeBookmark } = useBookmarks(book.id)
 
   // Initialize epub reader with saved progress
-  const { viewerRef, toc, currentLocation, percentage, isReady, error, goToLocation, goToPrev, goToNext, applyTheme } =
-    useEpubReader({
-      fileData: book.fileData,
-      bookId: book.id ?? 0,
-      initialLocation: progress?.location,
-    })
+  const {
+    viewerRef,
+    toc,
+    currentLocation,
+    percentage,
+    isReady,
+    error,
+    goToLocation,
+    goToPercentage,
+    goToPrev,
+    goToNext,
+    applyTheme,
+  } = useEpubReader({
+    fileData: book.fileData,
+    bookId: book.id ?? 0,
+    initialLocation: progress?.location,
+  })
 
   // Apply theme when settings or ready state changes
   useEffect(() => {
@@ -86,6 +97,26 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
     onSwipeLeft: goToNext,
     onSwipeRight: goToPrev,
   })
+
+  // Horizontal scroll navigation
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const handleWheel = (e: React.WheelEvent) => {
+    // Only respond to horizontal scrolling
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
+
+    // Debounce to prevent multiple page turns from momentum scrolling
+    if (scrollTimeoutRef.current) return
+
+    if (e.deltaX > 30) {
+      goToNext()
+    } else if (e.deltaX < -30) {
+      goToPrev()
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      scrollTimeoutRef.current = null
+    }, 300)
+  }
 
   if (error) {
     return (
@@ -196,7 +227,11 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
           </div>
         )}
 
-        <div className="relative mx-auto h-full w-full max-w-3xl flex-1 overflow-hidden" {...swipeHandlers}>
+        <div
+          className="relative mx-auto h-full w-full max-w-3xl flex-1 overflow-hidden"
+          {...swipeHandlers}
+          onWheel={handleWheel}
+        >
           <div
             ref={viewerRef}
             className={clsx(
@@ -209,7 +244,7 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
       </div>
 
       <footer className="border-t border-rule px-4 py-2">
-        <ProgressBar percentage={percentage} />
+        <ProgressBar percentage={percentage} onSeek={goToPercentage} />
       </footer>
     </div>
   )
