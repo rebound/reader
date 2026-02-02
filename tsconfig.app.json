@@ -25,7 +25,8 @@
     "rootDirs": [".", "./.react-router/types"],
     "paths": {
       "@/*": ["./app/*"]
-    }
+    },
+    "types": ["vite-plugin-pwa/client"]
   },
   "include": ["**/*", "**/.server/**/*", "**/.client/**/*", ".react-router/types/**/*"],
   "exclude": ["node_modules", "build"]
