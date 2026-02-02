@@ -1,5 +1,4 @@
 import { BookOpen, Import } from 'lucide-react'
-import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { AppFooter } from '@/components/app-footer.tsx'
@@ -16,13 +15,10 @@ export default function LibraryRoute() {
   const { books, loading, deleteBookByKey } = useBooks()
   const { mutate: importBooks, isPending: importing, error } = useImportBooks()
 
-  const handleFilesAccepted = useCallback(
-    (files: File[]) => {
-      if (files.length === 0) return
-      importBooks(files)
-    },
-    [importBooks],
-  )
+  const handleFilesAccepted = (files: File[]) => {
+    if (files.length === 0) return
+    importBooks(files)
+  }
 
   const importButton = (
     <label className="flex cursor-pointer items-center gap-2 rounded-lg bg-accent px-4 py-2 text-white transition-colors hover:opacity-90">

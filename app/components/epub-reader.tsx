@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 import { ArrowLeft, Bookmark, BookmarkPlus, ChevronLeft, ChevronRight, Menu, Settings } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ProgressBar } from '@/components/progress-bar.tsx'
 import { SettingsPanel } from '@/components/settings-panel.tsx'
@@ -62,20 +62,14 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
   }, [currentLocation, percentage, updateProgress])
 
   // Check if the current location is bookmarked
-  const isCurrentPageBookmarked = useMemo(() => {
-    if (!currentLocation) return false
-    return bookmarks.some((bm) => bm.location === currentLocation)
-  }, [currentLocation, bookmarks])
+  const isCurrentPageBookmarked = currentLocation ? bookmarks.some((bm) => bm.location === currentLocation) : false
 
-  const handleNavigate = useCallback(
-    (cfi: string) => {
-      goToLocation(cfi)
-      setShowSidebar(false)
-    },
-    [goToLocation],
-  )
+  const handleNavigate = (cfi: string) => {
+    goToLocation(cfi)
+    setShowSidebar(false)
+  }
 
-  const toggleBookmark = useCallback(() => {
+  const toggleBookmark = () => {
     if (!currentLocation) return
 
     if (isCurrentPageBookmarked) {
@@ -86,7 +80,7 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
     } else {
       void createBookmark(currentLocation, t('reader.bookmark.page_label', { percentage }))
     }
-  }, [currentLocation, isCurrentPageBookmarked, bookmarks, removeBookmark, createBookmark, percentage, t])
+  }
 
   const swipeHandlers = useSwipe({
     onSwipeLeft: goToNext,

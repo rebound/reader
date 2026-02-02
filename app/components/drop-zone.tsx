@@ -1,5 +1,4 @@
 import { clsx } from 'clsx'
-import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { ReactNode } from 'react'
 import type { Accept } from 'react-dropzone'
@@ -24,14 +23,11 @@ export function DropZone({
   children,
   className,
 }: DropZoneProps) {
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles.length > 0) {
-        onFilesAccepted(acceptedFiles)
-      }
-    },
-    [onFilesAccepted],
-  )
+  const onDrop = (acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      onFilesAccepted(acceptedFiles)
+    }
+  }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

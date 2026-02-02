@@ -1,5 +1,5 @@
 import ePub from 'epubjs'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { TocItem } from '@/components/sidebar.tsx'
 import type { Book as EpubBook, Location, NavItem, Rendition } from 'epubjs'
 import type { RefObject } from 'react'
@@ -198,26 +198,26 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
   }, [initialLocation])
 
   // Navigation actions
-  const goToLocation = useCallback((cfi: string) => {
+  const goToLocation = (cfi: string) => {
     if (renditionRef.current) {
       void renditionRef.current.display(cfi)
     }
-  }, [])
+  }
 
-  const goToPrev = useCallback(() => {
+  const goToPrev = () => {
     if (renditionRef.current) {
       void renditionRef.current.prev()
     }
-  }, [])
+  }
 
-  const goToNext = useCallback(() => {
+  const goToNext = () => {
     if (renditionRef.current) {
       void renditionRef.current.next()
     }
-  }, [])
+  }
 
   // Theme application
-  const applyTheme = useCallback((theme: string, fontSize: number, fontFamily: string, lineHeight: number) => {
+  const applyTheme = (theme: string, fontSize: number, fontFamily: string, lineHeight: number) => {
     const rendition = renditionRef.current
     if (!rendition) return
 
@@ -261,7 +261,7 @@ export function useEpubReader({ fileData, bookId, initialLocation }: EpubReaderO
       // Themes are not ready yet, will retry on the next call
       console.debug('Theme application deferred:', e)
     }
-  }, [])
+  }
 
   return {
     viewerRef,

@@ -1,5 +1,4 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { useCallback, useMemo } from 'react'
 import { db } from '@/utilities/db.ts'
 
 export type Theme = 'light' | 'sepia' | 'dark' | (string & {})
@@ -22,7 +21,7 @@ const defaultSettings: Settings = {
 export function useSettings() {
   const settingsRecords = useLiveQuery(() => db.settings.toArray(), [])
 
-  const settings = useMemo<Settings>(() => {
+  const settings: Settings = (() => {
     const result = { ...defaultSettings }
 
     if (settingsRecords) {
@@ -34,24 +33,24 @@ export function useSettings() {
           } else if (key === 'fontFamily') {
             result.fontFamily = record.value
           } else if (key === 'fontSize') {
-            result.fontSize = parseInt(record.value, 10) || defaultSettings.fontSize
+            result.fontSize = Number.parseInt(record.value, 10) || defaultSettings.fontSize
           } else {
-            result.lineHeight = parseFloat(record.value) || defaultSettings.lineHeight
+            result.lineHeight = Number.parseFloat(record.value) || defaultSettings.lineHeight
           }
         }
       }
     }
 
     return result
-  }, [settingsRecords])
+  })()
 
-  const updateSetting = useCallback(async <K extends keyof Settings>(key: K, value: Settings[K]): Promise<void> => {
+  const updateSetting = async <K extends keyof Settings>(key: K, value: Settings[K]): Promise<void> => {
     const stringValue = String(value)
 
     // Delete any existing records with this key, then add the new value
     await db.settings.where('key').equals(key).delete()
     await db.settings.add({ key, value: stringValue })
-  }, [])
+  }
 
   return {
     settings,

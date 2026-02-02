@@ -6,7 +6,7 @@ import type { Route } from './+types/root.ts'
 import type { PropsWithChildren } from 'react'
 import './styles/main.css'
 
-export const Layout = ({ children }: PropsWithChildren) => {
+export function Layout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <head>
@@ -43,6 +43,6 @@ export default function App() {
   )
 }
 
-export const HydrateFallback = (_props: Route.HydrateFallbackProps) => {
+export function HydrateFallback(_props: Route.HydrateFallbackProps) {
   return <></>
 }

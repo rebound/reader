@@ -9,7 +9,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ProgressBar } from '@/components/progress-bar.tsx'
 import { SettingsPanel } from '@/components/settings-panel.tsx'
@@ -174,42 +174,36 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
   }, [currentPage, numPages, updateProgress])
 
   // Check if the current page is bookmarked
-  const isCurrentPageBookmarked = useMemo(() => {
-    if (!currentPage) return false
-    return bookmarks.some((bm) => bm.location === String(currentPage))
-  }, [currentPage, bookmarks])
+  const isCurrentPageBookmarked = currentPage ? bookmarks.some((bm) => bm.location === String(currentPage)) : false
 
-  const goToPrev = useCallback(() => {
+  const goToPrev = () => {
     setCurrentPage((prev) => (prev ? Math.max(1, prev - 1) : 1))
     resetScroll()
-  }, [resetScroll])
+  }
 
-  const goToNext = useCallback(() => {
+  const goToNext = () => {
     setCurrentPage((prev) => (prev ? Math.min(numPages, prev + 1) : 1))
     resetScroll()
-  }, [numPages, resetScroll])
+  }
 
-  const goToPage = useCallback(
-    (pageNum: string) => {
-      const page = parseInt(pageNum, 10)
-      if (page >= 1 && page <= numPages) {
-        setCurrentPage(page)
-        setShowSidebar(false)
-        resetScroll()
-      }
-    },
-    [numPages, resetScroll],
-  )
+  const goToPage = (pageNum: string) => {
+    const page = parseInt(pageNum, 10)
+    if (page >= 1 && page <= numPages) {
+      setCurrentPage(page)
+      setShowSidebar(false)
+      resetScroll()
+    }
+  }
 
-  const zoomIn = useCallback(() => {
+  const zoomIn = () => {
     setScale((prev) => Math.min(3, prev + 0.1))
-  }, [])
+  }
 
-  const zoomOut = useCallback(() => {
+  const zoomOut = () => {
     setScale((prev) => Math.max(0.5, prev - 0.1))
-  }, [])
+  }
 
-  const toggleBookmark = useCallback(() => {
+  const toggleBookmark = () => {
     if (!currentPage) return
 
     if (isCurrentPageBookmarked) {
@@ -220,7 +214,7 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
     } else {
       void createBookmark(String(currentPage), t('reader.bookmark.pdf_label', { page: currentPage }))
     }
-  }, [currentPage, isCurrentPageBookmarked, bookmarks, removeBookmark, createBookmark, t])
+  }
 
   const percentage = numPages > 0 && currentPage ? Math.round((currentPage / numPages) * 100) : 0
   const isLoading = pdfLoading || currentPage === null
