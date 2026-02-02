@@ -9,7 +9,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ProgressBar } from '@/components/progress-bar.tsx'
 import { SettingsPanel } from '@/components/settings-panel.tsx'
@@ -57,6 +57,10 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
       })
     })
   }, [])
+
+  const resetScrollEffectEvent = useEffectEvent(() => {
+    resetScroll()
+  })
 
   // Load PDF document with TanStack Query
   const { data: pdfData, isLoading: pdfLoading, error: pdfError } = usePdfDocument(book.id, book.fileData)
@@ -146,10 +150,10 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
         setCurrentPage((prev) => (prev ? Math.max(1, prev - 1) : 1))
-        resetScroll()
+        resetScrollEffectEvent()
       } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
         setCurrentPage((prev) => (prev ? Math.min(numPages, prev + 1) : 1))
-        resetScroll()
+        resetScrollEffectEvent()
       }
     }
 
@@ -157,7 +161,7 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [numPages, resetScroll])
+  }, [numPages])
 
   // Save progress (debounced)
   useEffect(() => {
