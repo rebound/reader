@@ -1,4 +1,5 @@
 import { BookOpen, Import } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { AppFooter } from '@/components/app-footer.tsx'
@@ -6,14 +7,22 @@ import { AppHeader } from '@/components/app-header.tsx'
 import { AppShell } from '@/components/app-shell.tsx'
 import { BookCard } from '@/components/book-card.tsx'
 import { DropZone } from '@/components/drop-zone.tsx'
+import { EditBookDialog } from '@/components/edit-book-dialog.tsx'
 import { Spinner } from '@/components/spinner.tsx'
 import { useBooks } from '@/hooks/use-books.ts'
 import { useImportBooks } from '@/hooks/use-import-books.ts'
+import type { Book } from '@/utilities/db.ts'
 
 export default function LibraryRoute() {
   const { t } = useTranslation()
-  const { books, loading, deleteBookByKey } = useBooks()
+  const { books, loading, deleteBookByKey, updateBook } = useBooks()
   const { mutate: importBooks, isPending: importing, error } = useImportBooks()
+  const [editingBook, setEditingBook] = useState<Book | null>(null)
+
+  const handleSaveEdit = (id: number, changes: { title: string; author: string }) => {
+    void updateBook(id, changes)
+    setEditingBook(null)
+  }
 
   const handleFilesAccepted = (files: File[]) => {
     if (files.length === 0) return
@@ -78,10 +87,29 @@ export default function LibraryRoute() {
               <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {books.map((book) => (
                   <Link key={book.key} to={`/book/${book.key}`}>
-                    <BookCard book={book} onDelete={() => void deleteBookByKey(book.key)} />
+                    <BookCard
+                      book={book}
+                      onEdit={() => {
+                        setEditingBook(book)
+                      }}
+                      onDelete={() => {
+                        void deleteBookByKey(book.key)
+                      }}
+                    />
                   </Link>
                 ))}
               </div>
+
+              {editingBook && (
+                <EditBookDialog
+                  key={editingBook.id}
+                  book={editingBook}
+                  onSave={handleSaveEdit}
+                  onClose={() => {
+                    setEditingBook(null)
+                  }}
+                />
+              )}
             </>
           )}
         </main>

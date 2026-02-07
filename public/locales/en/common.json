@@ -40,7 +40,19 @@
   "book": {
     "not_found": "Book not found",
     "delete_confirm": "Delete \u2018{{title}}\u2019?",
-    "delete_button": "Delete book"
+    "delete_button": "Delete book",
+    "edit_button": "Edit book",
+    "edit": {
+      "title": "Edit Book",
+      "field": {
+        "title": "Title",
+        "author": "Author"
+      },
+      "action": {
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    }
   },
   "reader": {
     "load_error": {

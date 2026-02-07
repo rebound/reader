@@ -32,6 +32,10 @@ const getBookByKey = async (key: string): Promise<Book | undefined> => {
   return db.books.where('key').equals(key).first()
 }
 
+const updateBook = async (id: number, changes: Partial<Pick<Book, 'title' | 'author'>>): Promise<void> => {
+  await db.books.update(id, changes)
+}
+
 export function useBooks() {
   const books = useLiveQuery(() => db.books.orderBy('addedAt').reverse().toArray(), [])
 
@@ -43,5 +47,6 @@ export function useBooks() {
     deleteBookByKey,
     getBook,
     getBookByKey,
+    updateBook,
   }
 }
