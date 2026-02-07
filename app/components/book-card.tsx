@@ -1,4 +1,4 @@
-import { BookOpen, FileText, Pencil, Trash2 } from 'lucide-react'
+import { BookOpen, FileText, Pencil, Trash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Book } from '@/utilities/db.ts'
@@ -62,7 +62,7 @@ export function BookCard({ book, onEdit, onDelete }: BookCardProps) {
         <div className="absolute top-2 right-2 flex gap-1.5">
           <button
             onClick={handleEdit}
-            className="flex min-h-10 min-w-10 items-center justify-center rounded-full bg-ink/70 p-2 text-white opacity-70 transition-opacity active:bg-ink/90 sm:opacity-0 sm:group-hover:opacity-100 sm:hover:bg-ink/80"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded-full bg-paper/70 p-2 text-ink opacity-70 transition-opacity active:bg-paper/90 sm:opacity-0 sm:group-hover:opacity-100 sm:hover:bg-paper/80"
             title={t('book.edit_button')}
             aria-label={t('book.edit_button')}
           >
@@ -70,11 +70,11 @@ export function BookCard({ book, onEdit, onDelete }: BookCardProps) {
           </button>
           <button
             onClick={handleDelete}
-            className="flex min-h-10 min-w-10 items-center justify-center rounded-full bg-red-500 p-2 text-white opacity-70 transition-opacity active:bg-red-700 sm:opacity-0 sm:group-hover:opacity-100 sm:hover:bg-red-600"
+            className="flex min-h-10 min-w-10 items-center justify-center rounded-full bg-red-500 p-2 text-red-50 opacity-70 transition-opacity active:bg-red-700 sm:opacity-0 sm:group-hover:opacity-100 sm:hover:bg-red-600"
             title={t('book.delete_button')}
             aria-label={t('book.delete_button')}
           >
-            <Trash2 className="h-5 w-5" />
+            <Trash className="h-5 w-5" />
           </button>
         </div>
       </div>
