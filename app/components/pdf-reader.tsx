@@ -21,6 +21,7 @@ import { useProgress } from '@/hooks/use-progress.ts'
 import { useSwipe } from '@/hooks/use-swipe.ts'
 import type { Settings as SettingsType } from '@/hooks/use-settings.ts'
 import type { Book } from '@/utilities/db.ts'
+import type { WheelEventHandler } from 'react'
 
 type PdfReaderProps = {
   book: Book
@@ -230,7 +231,7 @@ export function PdfReader({ book, onClose, settings, onUpdateSetting }: PdfReade
 
   // Horizontal scroll navigation - only when page fits in viewport
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const handleWheel = (e: React.WheelEvent) => {
+  const handleWheel: WheelEventHandler<HTMLDivElement> = (e) => {
     const container = containerRef.current
     if (!container) return
 

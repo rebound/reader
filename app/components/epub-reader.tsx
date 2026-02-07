@@ -12,6 +12,7 @@ import { useProgress } from '@/hooks/use-progress.ts'
 import { useSwipe } from '@/hooks/use-swipe.ts'
 import type { Settings as SettingsType } from '@/hooks/use-settings.ts'
 import type { Book } from '@/utilities/db.ts'
+import type { WheelEventHandler } from 'react'
 
 type EpubReaderProps = {
   book: Book
@@ -100,7 +101,7 @@ export function EpubReader({ book, onClose, settings, onUpdateSetting }: EpubRea
 
   // Horizontal scroll navigation
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const handleWheel = (e: React.WheelEvent) => {
+  const handleWheel: WheelEventHandler<HTMLDivElement> = (e) => {
     // Only respond to horizontal scrolling
     if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
 
